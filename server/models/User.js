@@ -62,13 +62,11 @@ class User {
   removeUser(id) {
     let removedUser = this.getUser(id);
 
-    if (removedUser === undefined) {
-      return false;
+    if (removedUser) {
+      this.users = this.users.filter((user) => {
+        return user.id !== id;
+      });
     }
-
-    this.users = this.users.filter((user) => {
-      return user.id !== id;
-    });
 
     return removedUser;
   }
@@ -82,7 +80,7 @@ class User {
     //return an array of the names of the users in the room
     let userNameList = userList.map((user) => {
       return user.name;
-    })
+    });
   }
 
 }
