@@ -14,14 +14,34 @@
     </style>
   </head>
   <body>
-    <ul id="messages"></ul>
-    <form id="form">
-      <input name="messageTextBox" autocomplete="off" />
-      <button>Send</button>
-    </form>
+    <div class="chat_body">
+      <ul id="messages"></ul>
+      <form id="form">
+        <input name="messageTextBox" autocomplete="off" />
+        <button>Send</button>
+      </form>
+    </div>
+
+    <!--using Mustache.js -->
+    <script type="text/template" id="message-template">
+      <li class = "message">
+        <div class="message__title">
+          <h4> {{from}}</h4>
+          <span>{{timeCreated}}</span>
+        </div>
+        <div class="message__text">
+          <p>{{text}}</p>
+        </div>
+      </li>
+    </script>
+
     <script src="socket.io/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="/js/libs/mustache.js"></script>
+    <script type="text/javascript" src="/js/libs/moment.js"></script>
+    <script type="text/javascript" src="/js/libs/deparam.js"></script>
+
     <script type="text/javascript" src="/js/chat.js"></script>
   </body>
 </html>
