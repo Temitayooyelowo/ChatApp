@@ -4,8 +4,10 @@ const _ = require('lodash');
 const http = require('http'); //built in node module
 const socketIO = require('socket.io');
 
-const {mongoose} = require('./db/mongoose');
-const {User} = require('../public/js/Models/User');
+const moment = require('moment');
+
+// const {mongoose} = require('./db/mongoose');
+const {User} = require('./models/User');
 
 const app = express();
 const server = http.createServer(app); // http server instead of express server
@@ -13,6 +15,8 @@ const io = socketIO(server);
 
 const dbName = 'ChatApp';
 const port = process.env.PORT || 3000;
+
+const userList = new User();
 
 app.use(express.static(path.join(__dirname, '../public')));
 
@@ -47,22 +51,71 @@ app.get('/chat', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-  console.log("A user connected");
+
+  socket.on('join', (params, callback) => {
+      // if(!isRealString(params.name) || !isRealString(params.room)){
+      //   return callback('Name and room name are required'); //argument in callback is error argument
+      // }
+
+      socket.join(params.room);
+
+      userList.removeUser(socket.id);
+      let isUserAdded = userList.addUsers(socket.id, params.room, params.name);
+
+      if(!isUserAdded){
+        return callback(`${params.name} already exists in ${params.room} chatroom.`)
+      }
+
+
+      //io.to(params.room).emit('updateUserList', users.getUserList(params.room));
+
+      //sends to only the owner of the socket
+      socket.emit('userConnected', {
+        from: 'Admin',
+        text: `Welcome to the chat app ${params.name}.`,
+        createdAt: moment.valueOf()
+      });
+
+      console.log(`Welcome to the chat app ${params.name}.`);
+
+      //Send to everyone EXCEPT the owner of the socket
+      socket.broadcast.to(params.room).emit('userConnected', {
+        from: 'Admin',
+        text: `${params.name} has joined ${params.room} chatroom.`,
+        createdAt: moment.valueOf()
+      });
+
+      callback();
+  });
 
   socket.on('createMessage', (message, callback) => {
 
-    console.log(`New message is ${message.text}`);
+    console.log(`Message has been received by server and is being broadcasted: ${message.text}`);
+
+    io.emit('broadcastMessage', {
+      text: message.text,
+      user: userList.getUser(socket.id).name
+    });
 
     callback();
-    // socket.emit('generateNewMessage', () => {
-    //
-    // });
   });
 
   socket.on('disconnect', () => {
-    console.log('user disconnected');
+    let removedUser = userList.removeUser(socket.id);
+    let message = `${removedUser.name} has left the ${removedUser.room} chatroom.`;
+    //console.log("Removed User:", JSON.stringify(removedUser, undefined, 2));
+
+    socket.broadcast.to(removedUser.room).emit('leaveRoom', {
+      from: 'Admin',
+      text: message,
+      createdAt: moment.valueOf()
+    });
+
+    console.log(message);
   });
 });
+
+
 
 app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, '../public', 'index.html'));
