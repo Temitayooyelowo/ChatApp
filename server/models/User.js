@@ -81,6 +81,8 @@ class User {
     let userNameList = userList.map((user) => {
       return user.name;
     });
+
+    return userNameList;
   }
 
 }

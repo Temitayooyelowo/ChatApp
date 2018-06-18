@@ -67,7 +67,7 @@ io.on('connection', (socket) => {
       }
 
 
-      //io.to(params.room).emit('updateUserList', users.getUserList(params.room));
+      io.to(params.room).emit('updateUserList', userList.getRoomUsers(params.room));
 
       //sends to only the owner of the socket
       socket.emit('userConnected', {
@@ -110,6 +110,8 @@ io.on('connection', (socket) => {
       text: message,
       createdAt: moment.valueOf()
     });
+
+    io.to(removedUser.room).emit('updateUserList', userList.getRoomUsers(removedUser.room));
 
     console.log(message);
   });

@@ -62,6 +62,17 @@ socket.on('broadcastMessage', function (message) {
   //let formattedTime = moment(message.createdAt).format('h:mm a');
 });
 
+socket.on('updateUserList', function(users){
+  let ul = jQuery('<ul></ul>');
+
+  users.forEach(function(user) {
+    ul.append(jQuery('<li></li>').text(user));
+  });
+
+    //We don't want to append a list but completely wipe out the old one and replace it with the new one
+  jQuery('#users').html(ul);
+});
+
 socket.on('leaveRoom', function(message){
   let template = $('#message-template').html();
   Mustache.parse(template); //speeds up future use
