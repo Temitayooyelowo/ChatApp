@@ -4,7 +4,8 @@
   "description": "A simple chat app",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server/server.js",
+    "test": "mocha -t 5000 server/tests/*.test.js"
   },
   "author": "Temitayo Oyelowo",
   "license": "ISC",
@@ -16,5 +17,9 @@
     "mongoose": "^5.1.4",
     "mustache": "^2.3.0",
     "socket.io": "^2.1.1"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^5.2.0"
   }
 }
