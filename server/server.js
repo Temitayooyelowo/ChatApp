@@ -59,7 +59,17 @@ io.on('connection', (socket) => {
 
       socket.join(params.room);
 
-      userList.removeUser(socket.id);
+      let removedUser = userList.removeUser(socket.id);
+
+      if(removedUser) {
+        let message = `${removedUser.name} has left the ${removedUser.room} chatroom.`;
+        socket.broadcast.to(removedUser.room).emit('leaveRoom', {
+          from: 'Admin',
+          text: message,
+          createdAt: moment.valueOf()
+        });
+      }
+
       let isUserAdded = userList.addUsers(socket.id, params.room, params.name);
 
       if(!isUserAdded){
@@ -137,22 +147,6 @@ io.on('connection', (socket) => {
 
     console.log(message);
 
-  });
-
-  socket.on('test', (receivedMessage, callback) => {
-    let removedUser = userList.removeUser(socket.id);
-    let message = `${removedUser.name} has left the ${removedUser.room} chatroom.`;
-    //console.log("Removed User:", JSON.stringify(removedUser, undefined, 2));
-
-    socket.broadcast.to(removedUser.room).emit('leaveRoom', {
-      from: 'Admin',
-      text: message,
-      createdAt: moment.valueOf()
-    });
-
-    io.to(removedUser.room).emit('updateUserList', userList.getRoomUsers(removedUser.room));
-
-    console.log(message + "HERE!!!!");
   });
 });
 
