@@ -33,6 +33,11 @@ socket.on('connect', function() {
 socket.on('userConnected', function(message) {
   console.log(message);
 
+  //clear the message div for ONLY the user joining the room
+  if(message.text.indexOf('Welcome to the chat app') === 0){
+    $('#messages').html('');
+  }
+
   let template = $('#message-template').html();
   Mustache.parse(template); //speeds up future use
   let html = Mustache.render(template, {
@@ -45,8 +50,6 @@ socket.on('userConnected', function(message) {
 });
 
 socket.on('broadcastMessage', function (message) {
-  //The client should use a template rendering engine to dynamically display the message
-  // when a message is broadcasted
   console.log('Broadcasted message is recieved from client:', message.text);
 
   let template = $('#message-template').html();
@@ -89,7 +92,7 @@ function switchRooms(){
   let params = jQuery.deparam(window.location.search);
   let newRoom = prompt('Enter the new room you want to switch to: ');
 
-  if(!newRoom || newRoom === '' || newRoom === ' ' || newRoom === null){
+  if(!newRoom || newRoom === '' || newRoom === ' '){
     alert("Please enter a valid room");
     return;
   }
