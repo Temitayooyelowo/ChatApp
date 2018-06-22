@@ -83,4 +83,36 @@ socket.on('leaveRoom', function(message){
   });
 
   $('#messages').append(html);//adds the item as the last child in the unordered list
-})
+});
+
+function switchRooms(){
+  let params = jQuery.deparam(window.location.search);
+  let newRoom = prompt('Enter the new room you want to switch to: ');
+
+  if(!newRoom || newRoom === '' || newRoom === ' ' || newRoom === null){
+    alert("Please enter a valid room");
+    return;
+  }
+
+  socket.emit('join', {
+    name: params.name,
+    room: newRoom
+  }, function(err) {
+
+    //acknowlegment
+    if(err) {
+      alert(err);
+      window.location.href = '/login';
+    }else if (window.history.pushState) {
+        const newURL = new URL(window.location.href);
+        newURL.search = '?name=' + params.name + '&room=' + newRoom;
+        window.history.pushState({ path: newURL.href }, '', newURL.href);
+        console.log(newURL.search);
+    }else{
+        alert("Not supported on this version of this browser. Please update to the most recent version to enable the full capabilities.");
+    }
+
+    console.log('User joined ' + newRoom + ' successfully.');
+
+ });
+}

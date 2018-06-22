@@ -100,7 +100,29 @@ io.on('connection', (socket) => {
     callback();
   });
 
-  socket.on('disconnect', () => {
+  socket.on('switchRooms', (receivedMessage, callback) => {
+    let user = userList.getUser(socket.id);
+    let oldRoom = userList.switchRooms(socket.id, receivedMessage);
+
+    let message = `${user.name} has left the ${oldRoom} chatroom.`;
+
+    if(!!oldRoom){
+      socket.broadcast.to(oldRoom.room).emit('leaveRoom', {
+        from: 'Admin',
+        text: receivedMessage,
+        createdAt: moment.valueOf()
+      });
+
+
+
+      callback('Passed');
+    }
+
+    callback();
+
+  });
+
+  socket.on('disconnect', (callback) => {
     let removedUser = userList.removeUser(socket.id);
     let message = `${removedUser.name} has left the ${removedUser.room} chatroom.`;
     //console.log("Removed User:", JSON.stringify(removedUser, undefined, 2));
@@ -114,6 +136,23 @@ io.on('connection', (socket) => {
     io.to(removedUser.room).emit('updateUserList', userList.getRoomUsers(removedUser.room));
 
     console.log(message);
+
+  });
+
+  socket.on('test', (receivedMessage, callback) => {
+    let removedUser = userList.removeUser(socket.id);
+    let message = `${removedUser.name} has left the ${removedUser.room} chatroom.`;
+    //console.log("Removed User:", JSON.stringify(removedUser, undefined, 2));
+
+    socket.broadcast.to(removedUser.room).emit('leaveRoom', {
+      from: 'Admin',
+      text: message,
+      createdAt: moment.valueOf()
+    });
+
+    io.to(removedUser.room).emit('updateUserList', userList.getRoomUsers(removedUser.room));
+
+    console.log(message + "HERE!!!!");
   });
 });
 
