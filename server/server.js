@@ -87,6 +87,7 @@ io.on('connection', (socket) => {
       });
 
       console.log(`Welcome to the chat app ${params.name}.`);
+      console.log(`Room List: ${userList.getRoomList()}`);
 
       //Send to everyone EXCEPT the owner of the socket
       socket.broadcast.to(params.room).emit('userConnected', {
@@ -108,28 +109,6 @@ io.on('connection', (socket) => {
     });
 
     callback();
-  });
-
-  socket.on('switchRooms', (receivedMessage, callback) => {
-    let user = userList.getUser(socket.id);
-    let oldRoom = userList.switchRooms(socket.id, receivedMessage);
-
-    let message = `${user.name} has left the ${oldRoom} chatroom.`;
-
-    if(!!oldRoom){
-      socket.broadcast.to(oldRoom.room).emit('leaveRoom', {
-        from: 'Admin',
-        text: receivedMessage,
-        createdAt: moment.valueOf()
-      });
-
-
-
-      callback('Passed');
-    }
-
-    callback();
-
   });
 
   socket.on('disconnect', (callback) => {

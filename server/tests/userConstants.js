@@ -18,6 +18,11 @@ const USER_ARRAY = [{
   name: 'Sandra James'
 }];
 
+const ROOM_LIST = [
+  'Test Users',
+  'Users Test'
+];
+
 const NEW_USER = {
   id: '4',
   room: 'Test',
@@ -33,6 +38,7 @@ const DUPLICATE_NEW_USER = {
 
 module.exports = {
   "USER_ARRAY": USER_ARRAY,
+  "ROOM_LIST": ROOM_LIST,
   "NEW_USER": NEW_USER,
   "DUPLICATE_NEW_USER": DUPLICATE_NEW_USER,
   "INVALID_ID": INVALID_ID,

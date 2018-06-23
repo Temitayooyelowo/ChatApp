@@ -85,6 +85,18 @@ class User {
     return userNameList;
   }
 
+  getRoomList(){
+    let roomList = this.users.map((user) => {
+      return user.room;
+    });
+
+    let roomNameList = roomList.filter((room, index, arr) => {
+      return arr.indexOf(room) === index; //if the value is not first occuring then it must be a duplicate
+    });
+
+    return roomNameList;
+  }
+
 }
 
 module.exports = {
