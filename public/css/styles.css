@@ -4,14 +4,22 @@
     justify-content: center;
     align-items: center;
     width: 100vw;
-    background-color: #ff6b6b;
+/*     background-color: #ff6b6b; */
+    background: linear-gradient(45deg, hsl(20, 97%, 50%), hsl(25, 85%, 65%));
     color: #222f3e;
 }
 
 .join-chat{
-  background-color: #9269e2;
+/*   background-color: #9269e2; */
+/*   background: repeating-linear-gradient(50deg,#ff6b6b 0px,#9269e2 40px,hsl(120, 100%, 70%) 40px, yellow 80px); */
+  background-color: hsl(268, 75%, 69%);
+  box-shadow: 0 20px 10px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0, 0.23), 10px 7px 7px rgba(0,0,0,0.17);
   border-radius: 10px;
   padding: 40px 30px;
+}
+
+p:hover {
+    transform: sclae(1.2);
 }
 
 input[type=text] {
