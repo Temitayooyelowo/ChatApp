@@ -19,8 +19,26 @@
   padding: 40px 30px;
 }
 
+#join-chat-text {
+  position: relative;
+  animation-name: bouncing-text;
+  animation-duration: 850ms;
+}
+
+@keyframes bouncing-text {
+  0% {
+    bottom: 0px;
+  }
+  50% {
+    bottom: 70px;
+  }
+  100% {
+    bottom: 0px;
+  }
+}
+
 p:hover {
-    transform: sclae(1.2);
+    transform: scale(1.2);
 }
 
 input[type=text] {
@@ -47,6 +65,7 @@ input[type=submit], button {
 button:hover {
   animation-name: color-change;
   animation-duration: 1s;
+  animation-fill-mode: forwards;
 }
 
 @keyframes color-change {
