@@ -13,7 +13,7 @@
 /*   background-color: #9269e2; */
 /*   background: repeating-linear-gradient(50deg,#ff6b6b 0px,#9269e2 40px,hsl(120, 100%, 70%) 40px, yellow 80px); */
   background-color: hsl(268, 75%, 69%);
-  box-shadow: 0 20px 10px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0, 0.23), 10px 7px 7px rgba(0,0,0,0.17);
+  box-shadow: 0 15px 10px rgba(0,0,0,0.19), 3px 6px 6px rgba(0,0,0, 0.23), 10px 7px 7px rgba(0,0,0,0.17);
   /* box-shadow: 0 15px 20px rgba(0,0,0,0.19), 0 6px 10px rgba(0,0,0,0.24); */
   border-radius: 10px;
   padding: 40px 30px;
@@ -22,7 +22,8 @@
 #join-chat-text {
   position: relative;
   animation-name: bouncing-text;
-  animation-duration: 850ms;
+  animation-duration: 1s;
+  animation-timing-function: ease-ease-out;
 }
 
 @keyframes bouncing-text {
