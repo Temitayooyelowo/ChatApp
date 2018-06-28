@@ -1,5 +1,5 @@
 :root {
-  --body-color: hsl(10, 80%, 76%);
+  --body-color: hsl(10, 99%, 80%);;
 }
 
 .centered-form {
@@ -9,14 +9,13 @@
     align-items: center;
     width: 100vw;
 /*     background-color: #ff6b6b; */
-    background: linear-gradient(45deg, hsl(20, 85%, 65%), hsl(15, 85%, 65%), hsl(10, 97%, 50%));
-    color: #222f3e;
+    background: linear-gradient(70deg, hsl(20, 85%, 65%), hsl(15, 85%, 65%), hsl(10, 80%, 70%));
 }
 
 .join-chat{
   /* background-color: hsl(268, 75%, 69%); */
   color: var(--body-color);
-  background-color: hsl(257, 30%, 50%);
+  background-color: hsl(257, 28%, 48%);
   box-shadow: 0 20px 10px rgba(0,0,0,0.39), 3px 6px 16px rgba(0,0,0, 0.23), 10px 7px 7px rgba(0,0,0,0.47);
   /* box-shadow: 0 15px 20px rgba(0,0,0,0.19), 0 6px 10px rgba(0,0,0,0.24); */
   border-radius: 10px;
@@ -27,7 +26,7 @@
   position: relative;
   animation-name: bouncing-text;
   animation-duration: 1s;
-  animation-timing-function: ease-ease-out;
+  animation-timing-function: ease-out;
 }
 
 @keyframes bouncing-text {
