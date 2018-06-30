@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title> Duplicate | ChatApp </title>
+
+  <style>
+    .side_bar {
+      width: 260px;
+      height: 100vh;
+      overflow-y: auto;
+      /* background-color: #ff6b6b; */
+      background: linear-gradient(70deg, hsl(20, 85%, 65%), hsl(15, 85%, 65%), hsl(10, 80%, 70%));
+    }
+
+    .side_bar h2{
+      text-align: center;
+      color: white;
+    }
+
+    .overall {
+      display: flex;
+    }
+
+    .chat_message_section {
+      width: 70vw;
+      /* background-color: blue; */
+      margin: 10px 30px;
+    }
+
+    .header {
+      display: flex;
+      flex-direction: row;
+    }
+
+    .messages {
+      padding: 0;
+      margin: 0px 0 3px 0;
+      list-style-type: none;
+    }
+
+    header h4, span {
+      display: flex;
+      margin: 0px 0 3px 0;
+    }
+
+    .message__title{
+      display: flex;
+      flex-direction: column;
+
+      margin-left: 0px;
+    }
+
+    /* .message__title span {
+      padding: 0 0 0 auto;
+      margin: 0 0 0 auto;
+    } */
+
+  </style>
+</head>
+
+<body class="overall">
+
+      <section class="side_bar">
+        <h2 class="side_bar_header"> People </h2>
+      </section>
+
+      <section class="chat_message_section">
+
+          <ul class="messages">
+            <li class = "message">
+
+              <header>
+                <div class="message__title">
+                  <h4>Temitayo Oyelowo</h4>
+                  <span>8:06 pm</span>
+                </div>
+              </header>
+
+              <div class="message_body">
+                <p>Hey what's up?</p>
+              </div>
+
+            </li>
+          </ul>
+
+
+          <div class="chat-footer">
+
+            <form id="message-form">
+              <input type="text" id="message-field" class="message-field" placeholder="Enter your Message" autocomplete="off" autofocus>
+              <button id="SubmitButton" class="SubmitButton">Send</button>
+            </form>
+
+            <button onclick="switchRooms()">Switch Rooms</button>
+
+          </div>
+
+      </section>
+
+</body>
+</html>

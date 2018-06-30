@@ -60,13 +60,15 @@ io.on('connection', (socket) => {
       socket.join(params.room);
 
       let removedUser = userList.removeUser(socket.id);
+      let formattedTime = moment().format('LT');
 
+      console.log("Formatted Time: ", formattedTime);
       if(removedUser) {
         let message = `${removedUser.name} has left the ${removedUser.room} chatroom.`;
-        socket.broadcast.to(removedUser.room).emit('leaveRoom', {
-          from: 'Admin',
+        socket.broadcast.to(removedUser.room).emit('broadcastMessage', {
+          user: 'Admin',
           text: message,
-          createdAt: moment.valueOf()
+          createdAt: formattedTime
         });
       }
 
@@ -81,9 +83,9 @@ io.on('connection', (socket) => {
 
       //sends to only the owner of the socket
       socket.emit('userConnected', {
-        from: 'Admin',
+        user: 'Admin',
         text: `Welcome to the chat app ${params.name}.`,
-        createdAt: moment.valueOf()
+        createdAt: formattedTime
       });
 
       console.log(`Welcome to the chat app ${params.name}.`);
@@ -91,9 +93,9 @@ io.on('connection', (socket) => {
 
       //Send to everyone EXCEPT the owner of the socket
       socket.broadcast.to(params.room).emit('userConnected', {
-        from: 'Admin',
+        user: 'Admin',
         text: `${params.name} has joined ${params.room} chatroom.`,
-        createdAt: moment.valueOf()
+        createdAt: formattedTime
       });
 
       callback();
@@ -116,8 +118,8 @@ io.on('connection', (socket) => {
     let message = `${removedUser.name} has left the ${removedUser.room} chatroom.`;
     //console.log("Removed User:", JSON.stringify(removedUser, undefined, 2));
 
-    socket.broadcast.to(removedUser.room).emit('leaveRoom', {
-      from: 'Admin',
+    socket.broadcast.to(removedUser.room).emit('broadcastMessage', {
+      user: 'Admin',
       text: message,
       createdAt: moment.valueOf()
     });
@@ -129,12 +131,9 @@ io.on('connection', (socket) => {
   });
 });
 
-
-
 app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, '../public', 'index.html'));
 });
-
 
 server.listen(port, () => {
   console.log(`Server is up on port ${port}`);

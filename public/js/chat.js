@@ -76,18 +76,6 @@ socket.on('updateUserList', function(users){
   jQuery('#users').html(ul);
 });
 
-socket.on('leaveRoom', function(message){
-  let template = $('#message-template').html();
-  Mustache.parse(template); //speeds up future use
-  let html = Mustache.render(template, {
-    from: message.user,
-    text: message.text,
-    timeCreated: message.createdAt
-  });
-
-  $('#messages').append(html);//adds the item as the last child in the unordered list
-});
-
 function switchRooms(){
   let params = jQuery.deparam(window.location.search);
   let newRoom = prompt('Enter the new room you want to switch to: ');
