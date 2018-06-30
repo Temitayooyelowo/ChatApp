@@ -33,6 +33,7 @@
 
 .chat__sidebar li {
   padding-bottom: var(--top-spacing);
+  cursor: pointer;
 }
 
 .chat__main {
@@ -96,7 +97,8 @@
 
 .chat__footer button {
   border: none;
-  border-radius: 2px;
+  border-radius: 4px;
   background: var(--theme);
   color: white;
+  flex-grow: 0.1;
 }

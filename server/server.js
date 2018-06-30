@@ -78,8 +78,15 @@ io.on('connection', (socket) => {
         return callback(`${params.name} already exists in ${params.room} chatroom.`)
       }
 
+      io.to(params.room).emit('updateList', {
+         reason: 'updateUserList',
+         list: userList.getRoomUsers(params.room)
+       });
 
-      io.to(params.room).emit('updateUserList', userList.getRoomUsers(params.room), userList.getRoomList());
+       io.emit('updateList', {
+          reason: 'updateRoomList',
+          list: userList.getRoomList()
+        });
 
       //sends to only the owner of the socket
       socket.emit('userConnected', {
@@ -101,11 +108,12 @@ io.on('connection', (socket) => {
       callback();
   });
 
-  socket.on('createMessage', (message, callback) => {
+  socket.on('createMessage', (message, callback)  => {
+    let user = userList.getUser(socket.id);
 
-    console.log(`Message has been received by server and is being broadcasted: ${message.text}`);
+    console.log(`Message has been received by server and is being broadcasted: ${message.text} from room ${user.room}`);
 
-    io.emit('broadcastMessage', {
+    io.to(user.room).emit('broadcastMessage', {
       text: message.text,
       user: userList.getUser(socket.id).name
     });
@@ -124,7 +132,15 @@ io.on('connection', (socket) => {
       createdAt: moment.valueOf()
     });
 
-    io.to(removedUser.room).emit('updateUserList', userList.getRoomUsers(removedUser.room), userList.getRoomList());
+    io.to(removedUser.room).emit('updateList', {
+       reason: 'updateUserList',
+       list: userList.getRoomUsers(removedUser.room)
+     });
+
+     io.emit('updateList', {
+        reason: 'updateRoomList',
+        list: userList.getRoomList()
+      });
 
     console.log(message);
 

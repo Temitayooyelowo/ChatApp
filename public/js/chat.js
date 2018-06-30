@@ -65,29 +65,37 @@ socket.on('broadcastMessage', function (message) {
   //let formattedTime = moment(message.createdAt).format('h:mm a');
 });
 
-socket.on('updateUserList', function(usersNames, availableRooms){
+socket.on('updateList', function(listObject){
   let ul = jQuery('<ul></ul>');
+  let list = listObject.list;
+  let reason = listObject.reason;
 
-  usersNames.forEach(function(user) {
-    ul.append(jQuery('<li></li>').text(user));
-  });
+  if(reason === 'updateUserList'){
+    list.forEach(function(user) {
+      ul.append(jQuery('<li></li>').text(user));
+    });
 
-    //We don't want to append a list but completely wipe out the old one and replace it with the new one
-  jQuery('#users').html(ul);
+      //We don't want to append a list but completely wipe out the old one and replace it with the new one
+    jQuery('#users').html(ul);
+  }else if (reason === 'updateRoomList') {
+    ul = jQuery('<ul class="userList"></ul>');
 
-  ul = jQuery('<ul></ul>');
+    list.forEach(function(user) {
+      ul.append(jQuery('<li></li>').text(user));
+    });
 
-  availableRooms.forEach(function(user) {
-    ul.append(jQuery('<li></li>').text(user));
-  });
+      //We don't want to append a list but completely wipe out the old one and replace it with the new one
+    jQuery('.available__rooms').html(ul);
 
-    //We don't want to append a list but completely wipe out the old one and replace it with the new one
-  jQuery('#rooms').html(ul);
+    $("li" ).bind('click', function(){
+      switchRooms($(this).text());
+    });
+  }
+  
 });
 
-function switchRooms(){
+function switchRooms(newRoom= ''){
   let params = jQuery.deparam(window.location.search);
-  let newRoom = prompt('Enter the new room you want to switch to: ');
 
   if(!newRoom || newRoom === '' || newRoom === ' '){
     alert("Please enter a valid room");
