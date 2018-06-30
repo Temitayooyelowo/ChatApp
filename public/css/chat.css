@@ -15,6 +15,11 @@
   background: var(--theme);
 }
 
+#users, rooms {
+  height: 50%;
+  overflow-y: auto;
+}
+
 .chat__sidebar h2 {
   color: #e6eaee;
   margin: 10px 30px;

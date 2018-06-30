@@ -65,15 +65,24 @@ socket.on('broadcastMessage', function (message) {
   //let formattedTime = moment(message.createdAt).format('h:mm a');
 });
 
-socket.on('updateUserList', function(users){
+socket.on('updateUserList', function(usersNames, availableRooms){
   let ul = jQuery('<ul></ul>');
 
-  users.forEach(function(user) {
+  usersNames.forEach(function(user) {
     ul.append(jQuery('<li></li>').text(user));
   });
 
     //We don't want to append a list but completely wipe out the old one and replace it with the new one
   jQuery('#users').html(ul);
+
+  ul = jQuery('<ul></ul>');
+
+  availableRooms.forEach(function(user) {
+    ul.append(jQuery('<li></li>').text(user));
+  });
+
+    //We don't want to append a list but completely wipe out the old one and replace it with the new one
+  jQuery('#rooms').html(ul);
 });
 
 function switchRooms(){
