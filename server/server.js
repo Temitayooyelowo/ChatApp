@@ -70,6 +70,16 @@ io.on('connection', (socket) => {
           text: message,
           createdAt: formattedTime
         });
+
+        io.to(removedUser.room).emit('updateList', {
+           reason: 'updateUserList',
+           list: userList.getRoomUsers(removedUser.room)
+         });
+
+         io.emit('updateList', {
+            reason: 'updateRoomList',
+            list: userList.getRoomList()
+          });
       }
 
       let isUserAdded = userList.addUsers(socket.id, params.room, params.name);

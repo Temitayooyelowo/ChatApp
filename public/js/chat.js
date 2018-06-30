@@ -87,11 +87,11 @@ socket.on('updateList', function(listObject){
       //We don't want to append a list but completely wipe out the old one and replace it with the new one
     jQuery('.available__rooms').html(ul);
 
-    $("li" ).bind('click', function(){
+    $(".available__rooms li" ).bind('click', function(){
       switchRooms($(this).text());
     });
   }
-  
+
 });
 
 function switchRooms(newRoom= ''){
