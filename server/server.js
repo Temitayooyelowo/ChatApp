@@ -1,4 +1,4 @@
-require('./config/config');  //configure environmental variables
+require('./config/config');  //configure environmental variabless
 
 const express = require('express');
 const path = require('path');
