@@ -1,10 +1,9 @@
 const mongoose = require('mongoose');
 
-const url = 'mongodb://localhost:27017';
-const dbName = 'ChatApp';
+const url = process.env.MONGODB_URI;
 
 mongoose.Promise = global.Promise;
-mongoose.connect(`${url}/${dbName}`);
+mongoose.connect(`${url}`);
 
 module.exports = {
   mongoose: mongoose

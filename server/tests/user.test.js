@@ -2,7 +2,7 @@
 const chai = require('chai');
 const should = chai.should();  // Using Should style
 
-const {User} = require('../models/user');
+const {User} = require('../db/models/user');
 const {deepCopy} = require('./utils');
 const userConstant = require('./userConstants');
 

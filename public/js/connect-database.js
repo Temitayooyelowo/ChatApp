@@ -1,15 +1,12 @@
 'use strict';
-const {MongoClient} = require('mongodb');
+// const {MongoClient} = require('mongodb');
 const mongoose = require('mongoose');
 
 const {mongoose} = require('./db/mongoose');
 const {User} = require('./Models/User');
-//connection url
-const url = 'mongodb://localhost:27017';
-const dbName = 'ChatApp';
 
 //Use connect method to connect to the Server
-mongoose.connect('mongodb://localhost/ChatApp');
+mongoose.connect(process.env.MONGODB_URI);
 
 const name = 'Temitayo Oyelowo';
 const room = 'Test';

@@ -7,6 +7,29 @@
     <title>Join | ChatApp</title>
   </head>
   <body class='centered-form'>
+    <!-- <div id="fb-root"></div>
+    <script>
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '190876721766012',
+          cookie     : true,
+          xfbml      : true,
+          version    : 'v3.0'
+        });
+
+        FB.AppEvents.logPageView();
+
+      };
+
+      (function(d, s, id){
+         var js, fjs = d.getElementsByTagName(s)[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement(s); js.id = id;
+         js.src = 'https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v3.0&appId=190876721766012&autoLogAppEvents=1';
+         fjs.parentNode.insertBefore(js, fjs);
+       }(document, 'script', 'facebook-jssdk'));
+    </script> -->
+
     <div class='join-chat centered'>
       <h1 id='join-chat-text'>Join Chat</h1>
       <form class='join-form' action='/chat'>
@@ -26,6 +49,9 @@
 
           <a href='' id='sign_up'><p style='text-align:center'> Sign up</p></a>
       </form>
+
+      <a href="/auth/facebook" class="btn btn-primary"><span class="fa fa-facebook"></span> Facebook</a>
+      <!-- <div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="true" data-use-continue-as="true"></div> -->
     </div>
 
 
@@ -34,6 +60,6 @@
     <script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js' integrity='sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ' crossorigin='anonymous'></script>
     <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js' integrity='sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm' crossorigin='anonymous'></script>
 
-    <script type='text/javascript' src='/js/index.js'></script>
+    <!-- <script type='text/javascript' src='/js/index.js'></script> -->
   </body>
 </html>

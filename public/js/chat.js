@@ -18,7 +18,14 @@ socket.on('connect', function() {
   // console.log('Connected to server');
   let params = jQuery.deparam(window.location.search);
 
-  socket.emit('join', params, function (err) {
+  let room = prompt("Please enter the name of chat room", "Test");
+
+  if(!room || room===""){
+    alert("You will be redirected to login page. Next time please choose a room.");
+    window.location.href = '/login';
+  }
+
+  socket.emit('join', room , function (err) {
     //acknowlegment
     if(err) {
       alert(err);
