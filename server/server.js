@@ -60,7 +60,7 @@ passport.use(new FacebookStrategy({
               console.log('Unable to insert user into ' + dbName + '. ' + e);
               throw e;
             });
-          }  
+          }
 
         }).catch((err) => {
           return callback(err);
@@ -206,13 +206,6 @@ io.on('connection', (socket) => {
           let message = `${userName} has left the ${oldChatRoom} chatroom.`;
 
           user.chatRoom = room;
-
-          // user.save().then((doc) => {
-          //   console.log("User has been added to the database");
-          // }).catch((e) => {
-          //   console.log('Unable to insert user into ' + dbName + '. ' + e);
-          //   throw e;
-          // });
         }
         console.log('User did not belong to a previous chat room');
 
