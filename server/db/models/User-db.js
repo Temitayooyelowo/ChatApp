@@ -6,10 +6,10 @@ let UserSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
-  "facebook.id": String,
-  "facebook.token": String,
-  "facebook.name": String,
-  "facebook.email": String
+  "user.id": String,
+  "user.token": String,
+  "user.name": String,
+  "user.email": String
 });
 
 UserSchema.statics.findByNameAndEmail = function (name, room) {
@@ -40,7 +40,7 @@ UserSchema.statics.addRoom = function(id, room, callback){
   let User = this;
 
   User.findByIdAndUpdate(id, {$set: {chatRoom: room}}).then((user) => {
-    console.log(`User: ${user.facebook.name} has been updated and is now added to ${room} chat room`);
+    console.log(`User: ${user.user.name} has been updated and is now added to ${room} chat room`);
     callback(null);
   }).catch((e) => {
     console.log("Error adding user to chat room");
@@ -52,7 +52,7 @@ UserSchema.statics.logOffUser = function(id, callback){
   let User = this;
 
   User.findByIdAndUpdate(id, {loggedIn: false, chatRoom: ""}, {new: true}).then((user) => {
-    console.log(`${user.facebook.name} has been logged out of the chat app`);
+    console.log(`${user.user.name} has been logged out of the chat app`);
     callback(null, user);
   }).catch((e) => {
     console.log("Error logging off user from chat app.");
@@ -60,19 +60,20 @@ UserSchema.statics.logOffUser = function(id, callback){
   })
 }
 
-UserSchema.statics.logInUser = function(facebookId,  callback){
-  let User = this;
+UserSchema.methods.logInUser = function (callback) {
+  let user = this;
 
-  console.log("In login user function ");
+  user.loggedIn = true;
 
-  User.findOneAndUpdate({"facebook.id": facebookId}, {loggedIn: true}, {new: true}).then((user) => {
-    console.log(`${user.facebook.name} has been logged out of the chat app`);
+  user.save().then(() => {
+    console.log(JSON.stringify(user,undefined,2));
+    // console.log(`${user.user.name} has been logged out of the chat app`);
     callback(null, user);
   }).catch((e) => {
     console.log("Error logging in user from chat app.");
     callback(e, null);
-  })
-}
+  });
+};
 
 UserSchema.statics.getRoomUsers = function (room, callback) {
   let User = this; //model is the this binding
@@ -81,7 +82,7 @@ UserSchema.statics.getRoomUsers = function (room, callback) {
   User.find({chatRoom : room, loggedIn: true}).then((docs) => {
     console.log("Room is " + room);
     let userList = docs.map((user) => {
-      return user.facebook.name;
+      return user.user.name;
     });
     console.log("User list is : ", JSON.stringify(userList,undefined,2));
     // return docs;

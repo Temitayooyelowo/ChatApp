@@ -14,22 +14,26 @@ jQuery('#form').on('submit', function (e) {
 
 });
 
+socket.on('redirectUser', function() {
+    alert("Session timed out. You will be redirected to login page.");
+    window.location.href = '/auth/login';
+});
+
 socket.on('connect', function() {
   // console.log('Connected to server');
-  let params = jQuery.deparam(window.location.search);
 
   let room = prompt("Please enter the name of chat room", "Test");
 
   if(!room || room===""){
     alert("You will be redirected to login page. Next time please choose a room.");
-    window.location.href = '/login';
+    window.location.href = '/auth/login';
   }
 
   socket.emit('join', room , function (err) {
     //acknowlegment
     if(err) {
       alert(err);
-      window.location.href = '/login';
+      window.location.href = '/auth/login';
     }else {
       console.log('User joined successfully.');
     }
@@ -117,14 +121,7 @@ function switchRooms(newRoom= ''){
     //acknowlegment
     if(err) {
       alert(err);
-      window.location.href = '/login';
-    }else if (window.history.pushState) {
-        const newURL = new URL(window.location.href);
-        newURL.search = '?name=' + params.name + '&room=' + newRoom;
-        window.history.pushState({ path: newURL.href }, '', newURL.href);
-        console.log(newURL.search);
-    }else{
-        alert("Not supported on this version of this browser. Please update to the most recent version to enable the full capabilities.");
+      window.location.href = '/auth/login';
     }
 
     console.log('User joined ' + newRoom + ' successfully.');

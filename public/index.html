@@ -3,32 +3,11 @@
   <head>
     <meta charset='utf-8'>
     <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' integrity='sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm' crossorigin='anonymous'>
-    <link rel='stylesheet' href='css/styles.css'/>
+    <link rel='stylesheet' href='/css/styles.css'/>
+
     <title>Join | ChatApp</title>
   </head>
   <body class='centered-form'>
-    <!-- <div id="fb-root"></div>
-    <script>
-      window.fbAsyncInit = function() {
-        FB.init({
-          appId      : '190876721766012',
-          cookie     : true,
-          xfbml      : true,
-          version    : 'v3.0'
-        });
-
-        FB.AppEvents.logPageView();
-
-      };
-
-      (function(d, s, id){
-         var js, fjs = d.getElementsByTagName(s)[0];
-         if (d.getElementById(id)) {return;}
-         js = d.createElement(s); js.id = id;
-         js.src = 'https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v3.0&appId=190876721766012&autoLogAppEvents=1';
-         fjs.parentNode.insertBefore(js, fjs);
-       }(document, 'script', 'facebook-jssdk'));
-    </script> -->
 
     <div class='join-chat centered'>
       <h1 id='join-chat-text'>Join Chat</h1>
@@ -51,7 +30,9 @@
       </form>
 
       <a href="/auth/facebook" class="btn btn-primary"><span class="fa fa-facebook"></span> Facebook</a>
-      <!-- <div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="true" data-use-continue-as="true"></div> -->
+      <a href="/auth/twitter" class="btn btn-primary"><span class="fa fa-twitter"></span> Twitter</a>
+      <a href="/auth/google" class="btn btn-primary"><span class="fa fa-google"></span> Google</a>
+
     </div>
 
 
