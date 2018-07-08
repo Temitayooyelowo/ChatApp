@@ -11,15 +11,15 @@
 
     <div class='join-chat centered'>
       <h1 id='join-chat-text'>Join Chat</h1>
-      <form class='join-form' action='/chat'>
+      <form class='join-form' action='/auth/login' method="post">
           <div class=''>
-            <label for='name'>Display Name</label>
-            <input type='text' id='name' name='name' placeholder='Enter your name' autocomplete='off' autofocus />
+            <label for='username'>Display username</label>
+            <input type='text' id='username' name='username' placeholder='Enter your name' autocomplete='off' autofocus />
           </div>
 
           <div class=''>
-            <label for='room'>Room Name</label>
-            <input type='text' id='room' name='room' placeholder='Enter your room' autocomplete='off' >
+            <label for='password'>Password:</label>
+            <input type='password' id='password' name='password' minLength= "6" placeholder='6 characters minimum' autocomplete='off' required>
           </div>
 
           <div class=''>

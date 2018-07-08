@@ -50,7 +50,7 @@ p:hover {
     text-decoration-color: var(--body-color);
 }
 
-input[type=text] {
+input[type=text], input[type=password] {
   width: 100%;
   padding: 12px 20px;
   margin: 7px 0;

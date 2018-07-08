@@ -6,6 +6,10 @@ let UserSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  password: {
+    type: String,
+    minlength: 6
+  },
   "user.id": String,
   "user.token": String,
   "user.name": String,
