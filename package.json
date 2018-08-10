@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start": "node server/app/app.js",
-    "test": "mocha -t 5000 server/tests/*.test.js"
+    "test": "mocha -t 5000 server/mocha-tests/database/*.test.js --reporter nyan --exit",
+    "chatRoomTest": "mocha -t 5000 server/mocha-tests/database/ChatRoom.test.js  --exit",
+    "messagesTest": "mocha -t 5000 server/mocha-tests/database/Messages.test.js  --exit",
+    "User-dbTest": "mocha -t 5000 server/mocha-tests/database/User-db.test.js  --exit"
   },
   "author": "Temitayo Oyelowo",
   "license": "ISC",
@@ -36,6 +39,7 @@
   },
   "devDependencies": {
     "chai": "^4.1.2",
-    "mocha": "^5.2.0"
+    "mocha": "^5.2.0",
+    "why-is-node-running": "^2.0.2"
   }
 }

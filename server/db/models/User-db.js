@@ -1,4 +1,5 @@
 const {mongoose} = require('./../mongoose');
+const {ChatRoom} = require('./chatRoom');
 
 let UserSchema = new mongoose.Schema({
   "chatRoom": String,
@@ -16,122 +17,124 @@ let UserSchema = new mongoose.Schema({
   "user.email": String
 });
 
-UserSchema.statics.findByNameAndEmail = function (name, room) {
-  let User = this; //model is the this binding
+UserSchema.statics.getUser = async function (id) {
+  const User = this; //model is the this binding
 
-  return User.findOne({'name': name, 'room': room});
-};
-
-UserSchema.statics.saveUser = function(){
-  let user = this;
-
-  return user.save();
-}
-
-UserSchema.statics.getUser = function (id, callback) {
-  let User = this; //model is the this binding
-
-  return User.findById(id).then((user) => {
-    console.log('User has been found');
-    callback(null,user);
-  }).catch((e) => {
+  try{
+    const user = await User.findOne({ "user.id": id });
+    return (user) ? user : false;
+  }catch(e){
     console.log("Error encountered when finding user");
-    callback(e, null);
-  });
+    return {error: e.description};
+  }
+
 };
 
-UserSchema.statics.addRoom = function(id, room, callback){
-  let User = this;
+UserSchema.statics.addRoom = async function(id, room){
+  const User = this;
 
-  User.findByIdAndUpdate(id, {$set: {chatRoom: room}}).then((user) => {
-    console.log(`User: ${user.user.name} has been updated and is now added to ${room} chat room`);
-    callback(null);
-  }).catch((e) => {
-    console.log("Error adding user to chat room");
-    callback(e);
-  })
+  const chatroom = await ChatRoom.addUserToRoom(id, room);
+  if(chatroom.error){
+    console.error(err);
+    return error;
+  }
+
+  return (!!chatroom) ? true : false;
+  //Returns undefined by default if there's no return statement
 }
 
-UserSchema.statics.logOffUser = function(id, callback){
-  let User = this;
+UserSchema.statics.logOffUser = async function(id){
+  const User = this;
 
-  User.findByIdAndUpdate(id, {loggedIn: false, chatRoom: ""}, {new: true}).then((user) => {
-    console.log(`${user.user.name} has been logged out of the chat app`);
-    callback(null, user);
-  }).catch((e) => {
+  try{
+    const loggedOutUser = await User.findOneAndUpdate({"user.id": id}, {loggedIn: false}, {new: true});
+    return (!!loggedOutUser) ? loggedOutUser : false;
+  }catch(e){
     console.log("Error logging off user from chat app.");
-    callback(e, null);
-  })
+    return {error: e.description};
+  }
 }
 
-UserSchema.methods.logInUser = function (callback) {
-  let user = this;
+UserSchema.statics.logInUser = async function (id) {
+  const User = this;
 
-  user.loggedIn = true;
+  try{
 
-  user.save().then(() => {
-    console.log(JSON.stringify(user,undefined,2));
-    // console.log(`${user.user.name} has been logged out of the chat app`);
-    callback(null, user);
-  }).catch((e) => {
+    const loggedInUser = await User.findOneAndUpdate({"user.id": id}, {loggedIn: true}, {new: true});
+    return (!!loggedInUser) ? loggedInUser : false;
+  }catch(e){
     console.log("Error logging in user from chat app.");
-    callback(e, null);
-  });
+    return {error: e.description};
+  }
 };
 
-UserSchema.statics.getRoomUsers = function (room, callback) {
-  let User = this; //model is the this binding
-
-  console.log("In the getRoomUsers method");
-  User.find({chatRoom : room, loggedIn: true}).then((docs) => {
-    console.log("Room is " + room);
-    let userList = docs.map((user) => {
-      return user.user.name;
-    });
-    console.log("User list is : ", JSON.stringify(userList,undefined,2));
-    // return docs;
-    callback(null,userList);
-  }).catch((e) => {
-    console.log("Error when trying to find all users in a chat room");
-    callback(e, null);
+UserSchema.statics.addUserToDatabase = async function(profile, accessToken){
+  const email = !!profile.emails ? profile.emails[0].value : '';
+  const newUser = new User_DB({
+    "chatRoom": "",
+    "loggedIn": true,
+    "user.id": profile.id,
+    "user.token": accessToken,
+    "user.name": profile.displayName,
+    "user.email": email //return the first email (incase there are numerous emails returned)
   });
+
+  try{
+    await newUser.save();
+    return newUser;
+  }catch(e){
+    console.log(`Unable to insert user into users database`);
+    return {error: e.description};
+  }
 }
 
-UserSchema.statics.getRoomList = function (callback) {
+UserSchema.statics.getOnlineUsersInRoom = async function (room) {
+  const User = this; //model is the this binding
+
+  try{
+    const loggedInUsers = await User.find({loggedIn: true});
+    const chatRoomUsers = await ChatRoom.findAllUsersInChatRoom(room);
+
+    if(!!chatRoomUsers.error){
+      console.error(error);
+      throw error;
+    }
+    
+    const onlineUserNames = loggedInUsers.filter(loggedInUser => chatRoomUsers.includes(loggedInUser.user.id)).map(user => user.user.name);
+
+    return onlineUserNames;
+  }catch(e){
+    console.error("Error when trying to find all users in a chat room");
+    return {error: e.description};
+  }
+
+}
+
+UserSchema.statics.findRoomsForUser = async function (id) {
   let User = this;
 
-  User.find({loggedIn: true}).then((docs) => {
-    console.log("In the getRoomList method");
-
-    let roomList = docs.map((user) => {
-      return user.chatRoom;
-    });
-
-    let roomNameList = roomList.filter((room, index, arr) => {
-      return arr.indexOf(room) === index; //if the value is not first occuring then it must be a duplicate
-    });
-
-    console.log(roomNameList);
-
-    callback(null, roomNameList);
-
-  }).catch((e) => {
+  try{
+    const user = await User.findOne({ "user.id": id });;
+    return user;
+  }catch(e){
     console.log("Error when trying to find all the available rooms");
-    callback(e, null);
-  });
+    return { error: e.description };
+  }
 }
 
-UserSchema.statics.deleteUser = function (id, callback) {
-  let User = this;
+UserSchema.statics.deleteUser = async function (id) {
+  const User = this;
 
-  User.findByIdAndRemove(id).then((user) => {
-    console.log("User has been deleted from the database");
+  try{
+    /** Deletes the user from teh chatroom then deletes the user from the database */
+    await ChatRoom.deleteUserFromEveryChatRoom(id);
+    const deletedUser = await User.findOneAndRemove({"user.id":id});
 
-    callback(null, user);
-  }).catch((e) => {
-    console.log("Error encountered when trying to delete a user from the database");
-    callback(e, null);
-  })
+    return deletedUser;
+  }catch(e){
+    console.error("Error encountered when trying to delete a user from the database");
+    return { error: e.description };
+  }
 }
 
 let User_DB = mongoose.model('Users', UserSchema);

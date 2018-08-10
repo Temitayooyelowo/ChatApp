@@ -8,65 +8,20 @@ passport.use(new GoogleStrategy({
     callbackURL: process.env.GOOGLE_CALLBACK_URL
   },
   function(accessToken, refreshToken, profile, done) {
-    process.nextTick(function() {
+    process.nextTick(async function() {
 
-        User_DB.findOne({ "user.id": profile.id }).then((user) => {
-          if(user){
-            console.log("User was found in database");
+      if(await User_DB.getUser(profile.id)){
+        const loggedInUser = await User_DB.logInUser(profile.id);
+        console.log("Did not update user");
+        return (!loggedInUser || !!loggedInUser.error) ? done(loggedInUser, null) : done(null, loggedInUser);
+      }
 
-            user.logInUser(function(err, loggedInUser){
-              console.log(`After saving. Is user logged in? ${loggedInUser.loggedIn}`);
-              console.log(JSON.stringify(loggedInUser,undefined,2));
-              return done(null, loggedInUser);
-            });
-
-            console.log("Did NOT UPDATE USER");
-          }else{
-            console.log("User was not found in the database");
-
-            let newUser = new User_DB({
-              "chatRoom": "",
-              "loggedIn": true,
-              "user.id": profile.id,
-              "user.token": accessToken,
-              "user.name": profile.displayName,
-              "user.email": "" //return the first email (incase there are numerous emails returned)
-            });
-
-            newUser.save().then((doc) => {
-              console.log("User has been added to the database");
-               return done(null, newUser);
-            }).catch((e) => {
-              console.log(`Unable to insert user into users database`);
-              throw e;
-            });
-          }
-
-        }).catch((err) => {
-          return done(err);
-        });
+      const addedUser = await User_DB.addUserToDatabase(profile, accessToken);
+      console.log("User has been added to the database");
+      return (!!addedUser.error) ? done(addedUser.error, null) :done(null, addedUser);
+      
 
     });
-
-    // User_DB.findOrCreate({"user.name": profile.displayName, "user.id": profile.id}, {"user.name": profile.displayName,
-    // "user.id": profile.id, "user.email": "", "chatRoom": "",
-    // "loggedIn": true, "user.token": accessToken}).then((result) => {
-    //
-    //       console.log("In google then block");
-    //       //change logged in field to true if the user isn't a new user
-    //       if(!result.isNew){
-    //         user.logInUser(function(err, loggedInUser){
-    //           console.log(`After saving. Is user logged in? ${loggedInUser.loggedIn}`);
-    //           console.log(JSON.stringify(loggedInUser,undefined,2));
-    //           return done(null, loggedInUser);
-    //         });
-    //       }
-    //
-    //       done(null, user);
-    // }).catch((error) => {
-    //       console.log("In google catch block");
-    //       return done(err);
-    // });
 
   }
 ));

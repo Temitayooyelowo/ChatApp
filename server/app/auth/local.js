@@ -49,6 +49,8 @@ passport.use('local', new LocalStrategy(
               "user.email": "" //return the first email (incase there are numerous emails returned)
             });
 
+            newUser.user.id = newUser.id;
+            
             newUser.save().then((doc) => {
               console.log("User has been added to the database");
                return done(null, newUser);
