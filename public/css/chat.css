@@ -4,6 +4,10 @@
   margin: 0px;
 }
 
+#chatroom-title{
+  text-align: center;
+  color: rgba(109, 88, 157, 0.90);
+}
 .chat{
   display: flex;
 }
@@ -12,7 +16,7 @@
   height: 100vh;
   width: 270px;
   overflow-y: auto;
-  background: var(--theme);
+  background: var(--theme) !important;
 }
 
 #users, rooms {
@@ -41,6 +45,7 @@
   flex-direction: column;
   height: 100vh;
   width: 100%;
+  background-color: #eee;
 }
 
 .chat__main ul {

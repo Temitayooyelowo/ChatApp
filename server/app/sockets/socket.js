@@ -11,8 +11,6 @@ exports = module.exports = function(io, sharedsession){
 
   io.on('connection', (socket) => {
 
-    console.log('Socket handshake is --->', socket.handshake.session.passport);
-
     socket.on('join', async (chatRoom, callback) => {
       let formattedTime = moment().format('LT');
 
@@ -32,7 +30,6 @@ exports = module.exports = function(io, sharedsession){
       socket.join(chatRoom);
       const onlineRoomUsers = await User_DB.getOnlineUsersInRoom(chatRoom);
 
-      console.log("Online room user(s) is/are: ", onlineRoomUsers);
       io.to(chatRoom).emit('updateList', {
         reason: 'updateUserList',
         list: onlineRoomUsers
@@ -60,10 +57,7 @@ exports = module.exports = function(io, sharedsession){
 
       let chatMessages = await Messages.findAllMessages(chatRoom);
 
-      console.log(chatMessages);
       callback(null, chatMessages);
-
-
     });
 
     socket.on('createMessage', async (message, callback)  => {

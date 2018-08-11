@@ -34,7 +34,7 @@ jQuery(document).ready(function() {
     }
 
     //set h3 tag to title
-    $('#chatroom-title').html(room);
+    $('#chatroom-title').text(room);
 
     socket.emit('join', room , function (err, oldMessages) {
       //acknowlegment
@@ -42,35 +42,29 @@ jQuery(document).ready(function() {
         console.log('An error occured when joining a chatroom');
         alert(err);
         window.location.href = '/auth/login';
-      }else {
-        console.log('User joined successfully.');
-
-        let template = $('#message-template').html();
-        let html;
-
-        Mustache.parse(template); //speeds up future use
-
-        console.log("Old messages is --------->", oldMessages);
-        for(const message of oldMessages){
-          console.log("Message_text: " + message.messageText);
-          console.log("Sender_name: " + message.messageSender);
-          console.log("Timestamp: " + message.messageTimestamp)
-
-          const timeInLT = moment(message.messageTimestamp).format('LT');
-
-          html = Mustache.render(template, {
-            from: message.messageSender,
-            text: message.messageText,
-            timeCreated: timeInLT
-          });
-
-          $('#messages').append(html);
-        };
-        
-
-
+        return;
       }
 
+      console.log('User joined successfully.');
+
+      let template = $('#message-template').html();
+      let html;
+
+      Mustache.parse(template); //speeds up future use
+
+      for(const message of oldMessages){
+
+        const timeInLT = moment(message.messageTimestamp).format('LT');
+
+        html = Mustache.render(template, {
+          from: message.messageSender,
+          text: message.messageText,
+          timeCreated: timeInLT
+        });
+
+        $('#messages').append(html);
+      };
+        
     });
   });
 
@@ -81,7 +75,7 @@ jQuery(document).ready(function() {
   socket.on('userConnected', function(message) {
     console.log(message);
 
-    //clear the message div for ONLY the user joining the room
+    /** clear the message div for ONLY the user joining the room */
     if(message.text.indexOf('Welcome to the chat app') === 0){
       $('#messages').html('');
     }
@@ -119,13 +113,16 @@ jQuery(document).ready(function() {
     let reason = listObject.reason;
 
     if(reason === 'updateUserList'){
-      console.log('List is ---> ', list);
       list.forEach(function(user) {
         ul.append(jQuery('<li></li>').text(user));
       });
 
         /** We don't want to append a list but completely wipe out the old one and replace it with the new one */
       jQuery('#users').html(ul);
+
+      $(".users li" ).bind('click', function(){
+        switchRooms($(this).text());
+      });
     }else if (reason === 'updateRoomList') {
       ul = jQuery('<ul class="userList"></ul>');
 
@@ -144,27 +141,47 @@ jQuery(document).ready(function() {
   });
 
   function switchRooms(newRoom= ''){
-    let params = jQuery.deparam(window.location.search);
+    let currentRoom = $('#chatroom-title').text();
 
-    if(!newRoom || newRoom === '' || newRoom === ' '){
+    if(!newRoom || newRoom.trim() === ''){
       alert("Please enter a valid room");
       return;
     }
 
-    socket.emit('join', {
-      name: params.name,
-      room: newRoom
-    }, function(err) {
+    /** Do nothing */
+    if(newRoom === currentRoom ) return;
+
+    socket.emit('join', newRoom, function (err, messages) {
 
       //acknowlegment
-      if(err) {
+      if(!! err) {
         alert(err);
         window.location.href = '/auth/login';
       }
 
-      console.log('User joined ' + newRoom + ' successfully.');
+      console.log(`User switched from ${currentRoom} to ${newRoom} successfully.`);
 
-   });
+      $('#chatroom-title').text(newRoom);
+
+      let template = $('#message-template').html();
+      let html;
+
+      Mustache.parse(template); //speeds up future use
+
+      for(const message of messages){
+
+        const timeInLT = moment(message.messageTimestamp).format('LT');
+
+        html = Mustache.render(template, {
+          from: message.messageSender,
+          text: message.messageText,
+          timeCreated: timeInLT
+        });
+
+        $('#messages').append(html);
+      };
+
+    });
   }
 
 });

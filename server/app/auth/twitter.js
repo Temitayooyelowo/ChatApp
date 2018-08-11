@@ -8,7 +8,7 @@ passport.serializeUser(function (user, done) {
 
 passport.deserializeUser(async function (id, done) {
   const user = await User_DB.getUser(id);
-  console.log('Deserialized user is -->', JSON.stringify(user,undefined,2));
+  
   return (!!user.error) ? done(user.error, null) : done (null, user);
 });
 
