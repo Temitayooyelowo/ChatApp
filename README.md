@@ -1,3 +1,6 @@
 # ChatApp
 
-https://temitayo-chat-app.herokuapp.com/
+Ongoing Project...
+
+**Release Date:** *December 2018*
+
