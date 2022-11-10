@@ -35,7 +35,7 @@
     "passport-twitter": "^1.0.4",
     "passport.socketio": "^3.7.0",
     "serve-static": "^1.13.2",
-    "socket.io": "^2.1.1"
+    "socket.io": "^2.5.0"
   },
   "devDependencies": {
     "chai": "^4.1.2",
